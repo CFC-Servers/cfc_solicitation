@@ -67,7 +67,7 @@ function CFCAdverts.updateAdverts()
 end
 
 --Start adverting once the server is fully loaded or done changing levels
-hook.Add( "InitPostEntity", CFCAdverts.HOOK_NAME .. "_StartAdverting", function()
+hook.Add( "InitPostEntity", CFCAdverts.HOOK_BASE .. "_StartAdverting", function()
     timer.Remove( timerName )
     timer.Simple( 30, CFCAdverts.updateAdverts )
 end )
