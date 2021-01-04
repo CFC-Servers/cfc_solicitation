@@ -10,7 +10,7 @@ end
 
 util.AddNetworkString( CFCAdverts.HOOK_URL )
 
-CFCAdverts.cycleTime = 1000 --Time in seconds to go through all adverts
+CFCAdverts.cycleTime = 1000 -- Time in seconds to go through all adverts
 CFCAdverts.colors = {
     cfcInfoBlue = Color( 0, 168, 243, 255 ),
     lavender = Color( 155, 145, 255, 255 ),
