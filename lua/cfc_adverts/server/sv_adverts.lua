@@ -1,9 +1,9 @@
 CFCAdverts = CFCAdverts or {}
 
-local advertCount = 0
-local curAdvert = 1
-local advertKeys = {}
-local timerName = CFCAdverts.HOOK_BASE .. "_SendAdvert"
+CFCAdverts._advertCount = 0
+CFCAdverts._curAdvert = 1
+CFCAdverts._advertKeys = {}
+CFCAdverts._timerName = CFCAdverts.HOOK_BASE .. "_SendAdvert"
 
 local function buildNotif( notif, advert )
     notif:SetTitle( advert.title )
@@ -33,27 +33,27 @@ local function buildNotif( notif, advert )
 end
 
 function CFCAdverts.updateAdverts()
-    advertCount = table.Count( CFCAdverts.adverts )
-    advertKeys = table.GetKeys( CFCAdverts.adverts )
+    CFCAdverts._advertCount = table.Count( CFCAdverts.adverts )
+    CFCAdverts._advertKeys = table.GetKeys( CFCAdverts.adverts )
 
-    if advertCount == 0 then
+    if CFCAdverts._advertCount == 0 then
         timer.Simple( 30, CFCAdverts.updateAdverts ) -- Prevent CFC Adverts from dying forever if the list goes empty
         return
     end
 
-    curAdvert = math.min( curAdvert, advertCount )
-    local advertGap = CFCAdverts.cycleTime / advertCount
+    CFCAdverts._curAdvert = math.min( CFCAdverts._curAdvert, CFCAdverts._advertCount )
+    local advertGap = CFCAdverts.cycleTime / CFCAdverts._advertCount
 
-    timer.Create( timerName, advertGap, 0, function()
+    timer.Create( CFCAdverts._timerName, advertGap, 0, function()
         local plys = player.GetHumans()
 
         if table.IsEmpty( plys ) then return end
 
-        local advertName = advertKeys[curAdvert] or ""
+        local advertName = CFCAdverts._advertKeys[CFCAdverts._curAdvert] or ""
         local advert = CFCAdverts.adverts[advertName] or {}
 
-        if table.IsEmpty( advert ) or table.Count( CFCAdverts.adverts ) ~= advertCount then
-            timer.Remove( timerName ) -- Redundant, but just in case
+        if table.IsEmpty( advert ) or table.Count( CFCAdverts.adverts ) ~= CFCAdverts._advertCount then
+            timer.Remove( CFCAdverts._timerName ) -- Redundant, but just in case
             CFCAdverts.updateAdverts()
             return
         end
@@ -66,12 +66,12 @@ function CFCAdverts.updateAdverts()
 
         notif:Send( plys )
 
-        curAdvert = curAdvert % advertCount + 1
+        CFCAdverts._curAdvert = CFCAdverts._curAdvert % CFCAdverts._advertCount + 1
     end )
 end
 
 -- Start adverting once the server is fully loaded or done changing levels
 hook.Add( "InitPostEntity", CFCAdverts.HOOK_BASE .. "_StartAdverting", function()
-    timer.Remove( timerName )
+    timer.Remove( CFCAdverts._timerName )
     timer.Simple( 30, CFCAdverts.updateAdverts )
 end )
