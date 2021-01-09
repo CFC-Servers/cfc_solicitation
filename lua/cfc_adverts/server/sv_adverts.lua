@@ -23,7 +23,7 @@ local function buildNotif( notif, advert )
         function notif:OnButtonPressed( ply, index, ... )
             local button = advert.buttons[index]
 
-            button.func( ply, arg )
+            button.func( ply, ... )
 
             if not button.closeOnPress then return end
 
@@ -42,25 +42,23 @@ function CFCAdverts.updateAdverts()
     end
 
     CFCAdverts._curAdvert = math.min( CFCAdverts._curAdvert, CFCAdverts._advertCount )
-    local advertGap = CFCAdverts.cycleTime / CFCAdverts._advertCount
 
-    timer.Create( CFCAdverts._timerName, advertGap, 0, function()
+    timer.Create( CFCAdverts._timerName, CFCAdverts.advertGap:GetFloat(), 0, function()
         local plys = player.GetHumans()
 
         if table.IsEmpty( plys ) then return end
 
         local advertName = CFCAdverts._advertKeys[CFCAdverts._curAdvert] or ""
-        local advert = CFCAdverts.adverts[advertName] or {}
+        local advert = CFCAdverts.adverts[advertName]
 
-        if table.IsEmpty( advert ) or table.Count( CFCAdverts.adverts ) ~= CFCAdverts._advertCount then
+        if not advert or table.Count( CFCAdverts.adverts ) ~= CFCAdverts._advertCount then
             timer.Remove( CFCAdverts._timerName ) -- Redundant, but just in case
             CFCAdverts.updateAdverts()
             return
         end
 
         local notifName = CFCAdverts.HOOK_BASE .. "_" .. advertName
-        CFCNotifications.new( notifName, advert.type, true )
-        local notif = CFCNotifications.get( notifName )
+        local notif = CFCNotifications.new( notifName, advert.type, true )
 
         buildNotif( notif, advert )
 
