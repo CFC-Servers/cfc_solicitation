@@ -10,13 +10,14 @@ end
 
 util.AddNetworkString( CFCAdverts.HOOK_URL )
 
-CFCAdverts.cycleTime = 1000 -- Time in seconds to go through all adverts
+CFCAdverts.advertGap = CreateConVar( "cfc_adverts_gap", 120, FCVAR_NONE, "The time in seconds between adverts (default 120)", 1, 50000 )
+
 CFCAdverts.colors = {
-    cfcInfoBlue = Color( 0, 168, 243, 255 ),
-    lavender = Color( 155, 145, 255, 255 ),
-    softBlue = Color( 125, 165, 255, 255 ),
-    paleBlue = Color( 200, 220, 245, 255 ),
-    linkBlue = Color( 120, 220, 255, 255 ),
+    cfcInfoBlue = Color( 0, 168, 243 ),
+    lavender = Color( 155, 145, 255 ),
+    softBlue = Color( 125, 165, 255 ),
+    paleBlue = Color( 200, 220, 245 ),
+    linkBlue = Color( 120, 220, 255 ),
 }
 CFCAdverts.adverts = {
     --[[          Default text advert:
@@ -24,7 +25,7 @@ CFCAdverts.adverts = {
         type = "Text",
         title = "",
         text = "",
-        textColor = Color( 255, 255, 255, 255 ),
+        textColor = Color( 255, 255, 255 ),
         displayTime = 20,
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
@@ -36,7 +37,7 @@ CFCAdverts.adverts = {
         type = "Buttons",
         title = "",
         text = "",
-        textColor = Color( 255, 255, 255, 255 ),
+        textColor = Color( 255, 255, 255 ),
         displayTime = 20,
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
@@ -45,7 +46,7 @@ CFCAdverts.adverts = {
         buttons = {
             {
                 text = "",
-                buttonColor = Color( 255, 255, 255, 255 ),
+                buttonColor = Color( 255, 255, 255 ),
                 closeOnPress = true,
                 data = {},
                 func = function( ply, data1, data2, ... )
@@ -54,7 +55,7 @@ CFCAdverts.adverts = {
             },
             {
                 text = "",
-                buttonColor = Color( 255, 255, 255, 255 ),
+                buttonColor = Color( 255, 255, 255 ),
                 closeOnPress = true,
                 data = {},
                 func = function( ply, data1, data2, ... )
