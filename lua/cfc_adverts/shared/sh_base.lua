@@ -47,7 +47,6 @@ CFCAdverts.adverts = {
             {
                 text = "",
                 buttonColor = Color( 255, 255, 255 ),
-                closeOnPress = true,
                 data = {},
                 func = function( ply, data1, data2, ... )
                     
@@ -56,7 +55,6 @@ CFCAdverts.adverts = {
             {
                 text = "",
                 buttonColor = Color( 255, 255, 255 ),
-                closeOnPress = true,
                 data = {},
                 func = function( ply, data1, data2, ... )
                     
@@ -80,7 +78,6 @@ CFCAdverts.adverts = {
             {
                 text = "Swap Mode",
                 buttonColor = CFCAdverts.colors.paleBlue,
-                closeOnPress = true,
                 data = {},
                 func = function( ply )
                     ply:Say( "!pvp" )
@@ -116,7 +113,6 @@ CFCAdverts.adverts = {
             {
                 text = "cfcservers.org/discord",
                 buttonColor = CFCAdverts.colors.linkBlue,
-                closeOnPress = true,
                 data = {},
                 func = function( ply )
                     net.Start( CFCAdverts.HOOK_URL )
@@ -141,7 +137,6 @@ CFCAdverts.adverts = {
             {
                 text = "cfcservers.org/cfc3/collection",
                 buttonColor = CFCAdverts.colors.linkBlue,
-                closeOnPress = true,
                 data = {},
                 func = function( ply )
                     net.Start( CFCAdverts.HOOK_URL )
@@ -166,7 +161,6 @@ CFCAdverts.adverts = {
             {
                 text = "Read the Rules",
                 buttonColor = CFCAdverts.colors.paleBlue,
-                closeOnPress = true,
                 data = {},
                 func = function( ply )
                     ply:Say( "!motd" )
