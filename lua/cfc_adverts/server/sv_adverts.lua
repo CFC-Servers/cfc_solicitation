@@ -24,10 +24,6 @@ local function buildNotif( notif, advert )
             local button = advert.buttons[index]
 
             button.func( ply, ... )
-
-            if not button.closeOnPress then return end
-
-            notif:RemovePopup( notif:GetCallingPopupID(), ply )
         end
     end
 end
