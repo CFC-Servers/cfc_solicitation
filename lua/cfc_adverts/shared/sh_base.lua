@@ -2,22 +2,29 @@ CFCAdverts = CFCAdverts or {}
 
 CFCAdverts.HOOK_BASE = "CFC_Adverts"
 CFCAdverts.HOOK_URL = CFCAdverts.HOOK_BASE .. "_OpenURL"
+CFCAdverts.HOOK_IGNORE_GROUP = CFCAdverts.HOOK_BASE .. "_IgnoreGroup"
+CFCAdverts.IGNORE_GROUP_TEXT = "Block all '%s' notifs"
 
 if CLIENT then
     include( "cfc_adverts/client/cl_net.lua" )
     return
 end
 
+CFCAdverts.GROUPS = {}
+
 util.AddNetworkString( CFCAdverts.HOOK_URL )
+util.AddNetworkString( CFCAdverts.HOOK_IGNORE_GROUP )
 
 CFCAdverts.advertGap = CreateConVar( "cfc_adverts_gap", 120, FCVAR_NONE, "The time in seconds between adverts (default 120)", 1, 50000 )
 
+-- CONFIG:
 CFCAdverts.colors = {
     cfcInfoBlue = Color( 0, 168, 243 ),
     lavender = Color( 155, 145, 255 ),
     softBlue = Color( 125, 165, 255 ),
     paleBlue = Color( 200, 220, 245 ),
     linkBlue = Color( 120, 220, 255 ),
+    ignoreGroup = Color( 255, 145, 80 ),
 }
 CFCAdverts.adverts = {
     --[[          Default text advert:
@@ -30,7 +37,8 @@ CFCAdverts.adverts = {
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
         ignoreable = true,
-        timed = true
+        timed = true,
+        groupName = nil (string, don't include if you want ignoreable = false)
     },--]]
     --[[          Default button advert:
     AdvertName = {
@@ -43,6 +51,7 @@ CFCAdverts.adverts = {
         closeable = true,
         ignoreable = true,
         timed = true,
+        groupName = nil (string, don't include if you want ignoreable = false),
         buttons = {
             {
                 text = "",
@@ -74,6 +83,7 @@ CFCAdverts.adverts = {
         closeable = true,
         ignoreable = true,
         timed = true,
+        groupName = "CFC Info",
         buttons = {
             {
                 text = "Swap Mode",
@@ -96,7 +106,8 @@ CFCAdverts.adverts = {
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
         ignoreable = true,
-        timed = true
+        timed = true,
+        groupName = "CFC Info"
     },
     DiscordAdvert = {
         type = "Buttons",
@@ -109,6 +120,7 @@ CFCAdverts.adverts = {
         closeable = true,
         ignoreable = true,
         timed = true,
+        groupName = "CFC Info",
         buttons = {
             {
                 text = "cfcservers.org/discord",
@@ -133,6 +145,7 @@ CFCAdverts.adverts = {
         closeable = true,
         ignoreable = true,
         timed = true,
+        groupName = "CFC Info",
         buttons = {
             {
                 text = "cfcservers.org/cfc3/collection",
@@ -157,6 +170,7 @@ CFCAdverts.adverts = {
         closeable = true,
         ignoreable = true,
         timed = true,
+        groupName = "CFC Info",
         buttons = {
             {
                 text = "Read the Rules",
@@ -182,7 +196,8 @@ CFCAdverts.adverts = {
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
         ignoreable = true,
-        timed = true
+        timed = true,
+        groupName = "CFC Info"
     },
     RestorePropsInfo = {
         type = "Text",
@@ -196,7 +211,8 @@ CFCAdverts.adverts = {
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
         ignoreable = true,
-        timed = true
+        timed = true,
+        groupName = "CFC Info"
     },
     DupeInfo = {
         type = "Text",
@@ -210,8 +226,39 @@ CFCAdverts.adverts = {
         priority = CFCNotifications.PRIORITY_MIN,
         closeable = true,
         ignoreable = true,
-        timed = true
+        timed = true,
+        groupName = "CFC Info"
     },
 }
+--END OF CONGFIG
+
+
+for name, advert in pairs( CFCAdverts.adverts ) do
+    local groupName = advert.groupName
+
+    if not groupName then return end
+    if type( groupName ) ~= "string" then
+        -- groupName should only ever be nil or a string, but for just in case
+        groupName = tostring( groupName )
+        advert.groupName = groupName
+    end
+
+    name = CFCAdverts.HOOK_BASE .. "_" .. name
+
+    local group = CFCAdverts.GROUPS[groupName]
+    local groupCount
+
+    if not group then
+        group = {}
+        group.count = 0
+
+        CFCAdverts.GROUPS[groupName] = group
+    end
+
+    groupCount = group.count + 1
+
+    group[groupCount] = name
+    group.count = groupCount
+end
 
 include( "cfc_adverts/server/sv_adverts.lua" )

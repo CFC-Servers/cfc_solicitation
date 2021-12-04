@@ -15,16 +15,54 @@ local function buildNotif( notif, advert )
     notif:SetIgnoreable( advert.ignoreable )
     notif:SetTimed( advert.timed )
 
+    local groupName = advert.groupName
+    local hasButtons = false
+
     if advert.type == "Buttons" then
+        hasButtons = true
+
         for i, button in pairs( advert.buttons ) do
             notif:AddButton( button.text, button.buttonColor, i )
         end
+    end
 
-        function notif:OnButtonPressed( ply, index, ... )
-            local button = advert.buttons[index]
-
-            button.func( ply, ... )
+    if groupName then
+        if hasButtons then
+            notif:NewButtonRow()
         end
+
+        notif:AddButton( string.format( CFCAdverts.IGNORE_GROUP_TEXT, groupName ), CFCAdverts.colors.ignoreGroup, groupName )
+
+        hasButtons = true
+    end
+
+    if not hasButtons then return end
+
+    function notif:OnButtonPressed( ply, index, ... )
+        if index == groupName then
+            local group = CFCAdverts.GROUPS[groupName]
+
+            if not group then return end
+
+            local groupCount = group.count or 0
+
+            if groupCount == 0 then return end
+
+            net.Start( CFCAdverts.HOOK_IGNORE_GROUP )
+            net.WriteInt( groupCount, 10 )
+
+            for i = 1, groupCount do
+                net.WriteString( group[i] )
+            end
+
+            net.Send( ply )
+
+            return
+        end
+
+        local button = advert.buttons[index]
+
+        button.func( ply, ... )
     end
 end
 
@@ -53,8 +91,9 @@ function CFCAdverts.updateAdverts()
             return
         end
 
+        local effectiveType = advert.groupName and "Buttons" or advert.type -- Promote type to Buttons if advert is part of a group
         local notifName = CFCAdverts.HOOK_BASE .. "_" .. advertName
-        local notif = CFCNotifications.new( notifName, advert.type, true )
+        local notif = CFCNotifications.new( notifName, effectiveType, true )
 
         buildNotif( notif, advert )
 
@@ -68,4 +107,10 @@ end
 hook.Add( "InitPostEntity", CFCAdverts.HOOK_BASE .. "_StartAdverting", function()
     timer.Remove( CFCAdverts._timerName )
     timer.Simple( 30, CFCAdverts.updateAdverts )
+end )
+
+cvars.AddChangeCallback( "cfc_adverts_gap", function( _, old, new )
+    if old == new then return end
+
+    timer.Create( CFCAdverts.HOOK_BASE .. "_UpdateAdverts", 1, 1, CFCAdverts.updateAdverts )
 end )
