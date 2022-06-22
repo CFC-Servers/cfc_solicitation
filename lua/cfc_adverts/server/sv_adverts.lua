@@ -50,6 +50,7 @@ local function buildNotif( notif, advert )
 
             net.Start( CFCAdverts.HOOK_IGNORE_GROUP )
             net.WriteInt( groupCount, 10 )
+            net.WriteString( groupName )
 
             for i = 1, groupCount do
                 net.WriteString( group[i] )
