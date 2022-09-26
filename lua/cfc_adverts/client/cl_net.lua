@@ -15,7 +15,7 @@ net.Receive( CFCAdverts.HOOK_IGNORE_GROUP, function()
     local permIgnores = CFCNotifications._permIgnores
     local tempIgnores = CFCNotifications._tempIgnores
 
-    for i = 1, groupCount do
+    for _ = 1, groupCount do
         local notifID = net.ReadString()
 
         CFCNotifications._removePopupByNotificationID( notifID )
