@@ -134,54 +134,6 @@ CFCAdverts.adverts = {
             }
         }
     },
-    CollectionInfo = {
-        type = "Buttons",
-        title = "CFC Info",
-        text = "Looking for our server content?\n" ..
-               "The button below will bring you to our addon list.",
-        textColor = CFCAdverts.colors.softBlue,
-        displayTime = 20,
-        priority = CFCNotifications.PRIORITY_MIN,
-        closeable = true,
-        ignoreable = true,
-        timed = true,
-        groupName = "CFC Info",
-        buttons = {
-            {
-                text = "cfcservers.org/cfc3/collection",
-                buttonColor = CFCAdverts.colors.linkBlue,
-                data = {},
-                func = function( ply )
-                    net.Start( CFCAdverts.HOOK_URL )
-                    net.WriteString( "https://cfcservers.org/cfc3/collection" )
-                    net.Send( ply )
-                end
-            }
-        }
-    },
-    RulesInfo = {
-        type = "Buttons",
-        title = "CFC Info",
-        text = "Looking for the rules?\n" ..
-               "View them by typing !motd in chat or pressing the button below.",
-        textColor = CFCAdverts.colors.softBlue,
-        displayTime = 20,
-        priority = CFCNotifications.PRIORITY_MIN,
-        closeable = true,
-        ignoreable = true,
-        timed = true,
-        groupName = "CFC Info",
-        buttons = {
-            {
-                text = "Read the Rules",
-                buttonColor = CFCAdverts.colors.paleBlue,
-                data = {},
-                func = function( ply )
-                    ply:Say( "!motd" )
-                end
-            }
-        }
-    },
     NotificationInfo = {
         type = "Text",
         title = "CFC Info",
@@ -206,21 +158,6 @@ CFCAdverts.adverts = {
                "Type !restoreprops to load the latest backup.\n" ..
                "Backups will persist even if the server crashes!\n" ..
                "Backups are temporary and update often.",
-        textColor = CFCAdverts.colors.softBlue,
-        displayTime = 30,
-        priority = CFCNotifications.PRIORITY_MIN,
-        closeable = true,
-        ignoreable = true,
-        timed = true,
-        groupName = "CFC Info"
-    },
-    DupeInfo = {
-        type = "Text",
-        title = "CFC Info",
-        text = "This server has Advanced Duplicator 2 (Adv Dupe 2)\n" ..
-               "It is less laggy for the server than other dupe methods.\n" ..
-               "Adv Dupe 2 doesn't support your default duplications, but they can be transferred over in singleplayer!\n" ..
-               "The Adv Dupe 2 tool is in the 'Construction' category.",
         textColor = CFCAdverts.colors.softBlue,
         displayTime = 30,
         priority = CFCNotifications.PRIORITY_MIN,
